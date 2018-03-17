@@ -11,6 +11,11 @@ def test_existing_flask():
     valid_adapter = SlackEventAdapter("vFO9LARnLI7GflLR8tGqHgdy", "/slack/events", valid_flask)
     assert isinstance(valid_adapter, SlackEventAdapter)
 
+def test_existing_flask_factory():
+    valid_flask = Flask(__name__)
+    valid_adapter = SlackEventAdapter()
+    valid_adapter.init_app("vFO9LARnLI7GflLR8tGqHgdy", valid_flask, endpoint="/slack/events")
+    assert isinstance( valid_adapter, SlackEventAdapter )
 
 def test_server_not_flask():
     with pytest.raises(TypeError) as e:
@@ -64,3 +69,7 @@ def test_server_start(mocker):
     mocker.spy(slack_events_adapter, 'server')
     slack_events_adapter.start(port=3000)
     slack_events_adapter.server.run.assert_called_once_with(debug=False, host='127.0.0.1', port=3000)
+
+
+if __name__ == "__main__":
+    test_existing_flask_factory()

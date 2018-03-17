@@ -6,6 +6,8 @@ slackeventsapi.egg-info
 *.log
 env
 .tox
+.pytest_cache
+cov_html/
 *.un~
 0/
 tests/.cache

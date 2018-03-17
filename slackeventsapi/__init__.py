@@ -3,12 +3,19 @@ from .server import SlackServer
 
 
 class SlackEventAdapter(EventEmitter):
-    # Initialize the Slack event server
+    # Initialize the Slack event server via declarative
+    # If no args provided, you want to use the factory init_app
     # If no endpoint is provided, default to listening on '/slack/events'
-    def __init__(self, verification_token, endpoint="/slack/events", server=None):
+    def __init__( self, verification_token=None, endpoint="/slack/events", server = None ):
         EventEmitter.__init__(self)
+        if verification_token or server:
+            self.verification_token = verification_token
+            self.server = SlackServer(verification_token, endpoint, self, server)
+
+    # Factory method
+    def init_app( self, verification_token, server, endpoint="/slack/events" ):
         self.verification_token = verification_token
-        self.server = SlackServer(verification_token, endpoint, self, server)
+        self.server = SlackServer( verification_token, endpoint, self, server )
 
     def start(self, host='127.0.0.1', port=None, debug=False, **kwargs):
         """
